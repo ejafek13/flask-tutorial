@@ -2,9 +2,12 @@ import os
 
 from flask import Flask
 
+#note activate virtual env with "source venv/bin/activate"
+
 def create_app(test_config = None):
     #create and configure app
     app = Flask(__name__, instance_relative_config=True)
+
     app.config.from_mapping(
         #remember to change this
         SECRET_KEY='dev',
@@ -28,6 +31,12 @@ def create_app(test_config = None):
     @app.route('/hello')
     def hello():
         return "Hello Ben! Please keep being cute"
+
+    from . import db
+    db.init_app(app)
+
+    from . import auth
+    app.register_blueprint(auth.bp)
 
     return app
 
